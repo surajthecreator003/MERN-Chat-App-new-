@@ -1,20 +1,29 @@
 import React,{useState} from 'react';
 import {  Button,Input,FormControl,FormLabel, VStack, InputGroup, InputRightElement } from '@chakra-ui/react'
+import axios from "axios";
+import { useHistory } from "react-router";
+import { useToast } from "@chakra-ui/toast";
 
 
 const Login = () => {
    
     const [email,setEmail]=useState();
     const [password,setPassword]=useState();
-    const [show,setShow]=useState(false)
+    const [show,setShow]=useState(false);
+    const [loading,setLoading]=useState(false);
    
+
+    const toast=useToast()
+    const history=useHistory();
     const handleClick=()=>setShow(!show);
    
     const postDetails=(pics)=>{
    
     }
    
-    const submitHandler=()=>{}
+    const submitHandler=async()=>{
+      
+    }
    
    
    
@@ -59,7 +68,7 @@ const Login = () => {
            onClick={submitHandler}
            
          >
-           Sign Up
+           Login
          </Button>
 
          <Button
@@ -68,7 +77,7 @@ const Login = () => {
            width="100%"
           
            onClick={()=>{
-            setEmail("gues@example.com");
+            setEmail("guest@example.com");
             setPassword("123456")
            }           
            }

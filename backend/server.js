@@ -1,7 +1,8 @@
 const express=require("express");
 const dotenv=require("dotenv");
 const connectDB=require("./config/db.js")
-const userRoutes=require("./routes/userRoutes")
+const userRoutes=require("./routes/userRoutes");
+const {notFound,errorHandler} =require("./middlewares/errorMiddleware")
 
 const {chats} = require("./data/data")
 //console.log(chats);
@@ -13,6 +14,8 @@ connectDB();
 const app=express();
 
 app.use(express.json());//to accept json data and convert it to normal data
+
+
 
 app.get("/",(req,res)=>{
     res.send("API is Running")
@@ -30,6 +33,9 @@ app.get("/",(req,res)=>{
 
 
 app.use("/api/user",userRoutes)
+
+app.use(notFound);
+app.use(errorHandler);
 
 
 const PORT=process.env.PORT || 5000
