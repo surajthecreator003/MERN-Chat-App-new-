@@ -5,6 +5,8 @@ import { useHistory } from "react-router";
 import { useToast } from "@chakra-ui/toast";
 
 
+
+
 const Login = () => {
    
     const [email,setEmail]=useState();
@@ -18,12 +20,17 @@ const Login = () => {
     const handleClick=()=>setShow(!show);
    
     const postDetails=(pics)=>{
-   
+            
     }
    
+  
+
+
     const submitHandler=async()=>{
+     // Assuming you have state for form data
+
       
-    }
+ }
    
    
    

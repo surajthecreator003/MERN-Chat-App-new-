@@ -60,4 +60,22 @@ const authUser=asyncHandler(async(req,res)=>{
 })
 
 
-module.exports={registerUser,authUser};
+//api/users?search=user
+const allUsers= asyncHandler(async(req,res)=>{
+ const keyword=req.query.search ? {
+    $or: [
+      { name: { $regex: req.query.search, $options: "i" } },
+      { email: { $regex: req.query.search, $options: "i" } },
+    ],
+  }
+: {};
+
+ console.log(keyword);
+ const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });//this ne makes sure to return all those user expect yourself for chats
+ //because of this use of user._id implemented a whole auth middleware
+
+ res.send(users);// this is gonna be used to render the users on frontend
+})
+
+module.exports={registerUser,authUser,allUsers};
+ 
