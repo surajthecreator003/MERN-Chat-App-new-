@@ -36,8 +36,8 @@ const registerUser=asyncHandler(async(req,res)=>{
     }else{
         res.statusCode(400);
         throw new Error("User not Found");
-    }   
-})
+    }    
+}) 
 
 
 //for login
@@ -60,8 +60,10 @@ const authUser=asyncHandler(async(req,res)=>{
 })
 
 
-//api/users?search=user
+//api/users?search=user  exapmple search=suraj
 const allUsers= asyncHandler(async(req,res)=>{
+
+  //simply takes search param from req body and makes a case insensitive search
  const keyword=req.query.search ? {
     $or: [
       { name: { $regex: req.query.search, $options: "i" } },

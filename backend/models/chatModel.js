@@ -10,16 +10,16 @@ const mongoose=require("mongoose");
 const chatModel=mongoose.Schema(
     {
        chatName:{type:String,trim:true},
-        isGroupChat:{type:Boolean,default:false},
-         users:[{
+       isGroupChat:{type:Boolean,default:false},
+       users:[{
             type:mongoose.Schema.Types.ObjectId,
             ref:"User"
          }],
-         latestMessage:{
+       latestMessage:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"Message"
          },
-         groupAdmin:{
+       groupAdmin:{
             type:mongoose.Schema.Types.ObjectId,
             ref:"User",
          }
@@ -29,5 +29,5 @@ const chatModel=mongoose.Schema(
     }
 )
 
-const Chat=mongoose.model("Chat",chadtModel);
+const Chat=mongoose.model("Chat",chatModel);
 module.exports=Chat;
