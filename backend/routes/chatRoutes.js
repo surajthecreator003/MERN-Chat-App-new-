@@ -2,7 +2,7 @@ const express=require("express");
 
 const {protect}=require("../middlewares/authMiddleware")
 
-const {accessChat,fetchChats,createGroupChat}=require("../controllers/chatControllers")
+const {accessChat,fetchChats,createGroupChat,renameGroupChat}=require("../controllers/chatControllers")
 
 const router=express.Router()
 
@@ -13,7 +13,8 @@ router.route("/").get(protect,fetchChats);//THIS WILL HELP IN FETCHING ALL THE C
 // IF THERE ARE ANY PREVIOUS MADE MESSAGES
 
 router.route("/group").post(protect,createGroupChat);
-// router.route("/rename").put(protect,renameGroupChat);
+
+router.route("/rename").put(protect,renameGroupChat);
 // router.route("/groupremove").put(protect,removeFromGroup);
 // router.route("/groupadd").put(protect,addToGroup);
 
