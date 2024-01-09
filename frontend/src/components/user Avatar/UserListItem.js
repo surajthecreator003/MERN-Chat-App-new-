@@ -17,7 +17,7 @@ const UserListItem = ({ handleFunction,user }) => {
         color: "white",
       }}
       w="100%"
-      d="flex"
+      display="flex"
       alignItems="center"
       color="black"
       px={3}
@@ -25,6 +25,8 @@ const UserListItem = ({ handleFunction,user }) => {
       mb={2}
       borderRadius="lg"
     >
+
+    {/* the avatar of the user is displayed here */}
       <Avatar
         mr={2}
         size="sm"
@@ -32,6 +34,8 @@ const UserListItem = ({ handleFunction,user }) => {
         name={user.name}
         src={user.pic}
       />
+
+      
       <Box>
         <Text>{user.name}</Text>
         <Text fontSize="xs">
@@ -45,3 +49,5 @@ const UserListItem = ({ handleFunction,user }) => {
 };
 
 export default UserListItem;
+
+//Code review Done

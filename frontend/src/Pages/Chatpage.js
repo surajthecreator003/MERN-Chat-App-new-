@@ -3,20 +3,32 @@ import {ChatState} from '../Context/ChatProivder';
 import SideDrawer from '../components/Miscellaneous/SideDrawer';
 import MyChats from '../components/Miscellaneous/MyChats';
 import ChatBox from '../components/Miscellaneous/ChatBox';
+import { useState } from 'react';
 //import axios from "axios";
 
 const Chatpage = () => {
 
-const {user}=ChatState()
+const {user}=ChatState();//will get the user that logged in from the context provider
+const{fetchAgain,setFetchAgain}=useState(false);
 
   return (
     <div style={{width:"100%"}}>
 
      {user && <SideDrawer/>}
 
-     <Box d="flex" justifyContent="space-betwen" w="100" h="91.5vh" p="10px">
-       {user && <MyChats/>}
-       {user && <ChatBox/>}
+     <Box display="flex" justifyContent="space-betwen" w="100" h="91.5vh" p="10px">
+
+       {user && <MyChats 
+                  fetchAgain={fetchAgain}   
+                  />
+        }
+
+       {
+       user && <ChatBox
+                fetchAgain={fetchAgain}
+                setFetchAgain={setFetchAgain}
+                />
+       }
      </Box>
 
     </div>

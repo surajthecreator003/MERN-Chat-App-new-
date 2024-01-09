@@ -19,10 +19,14 @@ import {
   import UserBadgeItem from "../user Avatar/UserBadge";
   import UserListItem from "../user Avatar/UserListItem";
   
+
+
+  //this component is only responsible for creating the group chat
+  //and not the ChatBox
   const GroupChatModal = ({ children }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [groupChatName, setGroupChatName] = useState();
-    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [selectedUsers, setSelectedUsers] = useState([]);//initially no musers in a group
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -51,16 +55,18 @@ import {
         return;
       }
   
-      try {
+      try {//set initially loading as it can take time for data to  fetch
         setLoading(true);
         const config = {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
         };
+
         const { data } = await axios.get(`/api/user?search=${search}`, config);
-        console.log(data);
-        setLoading(false);
+        console.log("searched users data=",data);
+
+        setLoading(false);//after getting search result cancel the loading
         setSearchResult(data);
       } catch (error) {
         toast({
@@ -105,7 +111,12 @@ import {
           config
         );
         setChats([data, ...chats]);
-        onClose();
+
+        onClose();//need to close the Create Group Chat Modal after creating group
+        // the custom hooks useDisclosure() can be used as a function call as well
+
+
+        //show a mesage with toast that the group has been created
         toast({
           title: "New Group Chat Created!",
           status: "success",
@@ -131,17 +142,23 @@ import {
   
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
           <ModalOverlay />
+
+
           <ModalContent>
             <ModalHeader
               fontSize="35px"
               fontFamily="Work sans"
-              d="flex"
+              display="flex"
               justifyContent="center"
             >
               Create Group Chat
             </ModalHeader>
             <ModalCloseButton />
-            <ModalBody d="flex" flexDir="column" alignItems="center">
+
+
+            <ModalBody display="flex" flexDir="column" alignItems="center">
+
+            {/*This FormControll will send data to the /api/chat/group endpoint to create the group */}
               <FormControl>
                 <Input
                   placeholder="Chat Name"
@@ -156,7 +173,11 @@ import {
                   onChange={(e) => handleSearch(e.target.value)}
                 />
               </FormControl>
-              <Box w="100%" d="flex" flexWrap="wrap">
+
+
+              {/*This Box will display the users that are selected to be added in the group chat */}
+              {/*The handleDelete willl delete the selected user */}
+              <Box w="100%" display="flex" flexWrap="wrap">
                 {selectedUsers.map((u) => (
                   <UserBadgeItem
                     key={u._id}
@@ -165,6 +186,8 @@ import {
                   />
                 ))}
               </Box>
+
+            {/*This Box will display  upto 4 users that are searched for aesthetic sense */}
               {loading ? (
                 // <ChatLoading />
                 <div>Loading...</div>
@@ -180,11 +203,17 @@ import {
                   ))
               )}
             </ModalBody>
+
+
+
             <ModalFooter>
+            {/*This Button will send the data to the /api/chat/group endpoint */}
               <Button onClick={handleSubmit} colorScheme="blue">
                 Create Chat
               </Button>
             </ModalFooter>
+
+
           </ModalContent>
         </Modal>
       </>
@@ -192,3 +221,5 @@ import {
   };
   
   export default GroupChatModal;
+
+  //Code reviewed full component

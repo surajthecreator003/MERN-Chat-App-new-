@@ -40,12 +40,14 @@ export const isSameSenderMargin = (messages, m, i, userId) => {
   };
   
   export const getSender = (loggedUser, users) => {
-    //checks the logged user is same or different and returns the 
-    // and remember the lofggds user is always at 0 index in the schema
-    //thats whybreturn 0 index rather than returning nothing
+    //checks the logged user is same or different and returns the sender name at index 1
+    // and remember the lofggd user is always at 0 index in the schema
+    //thats whybnreturn 1 index or if not then return 0 index rather than returning nothing
     return users[0]?._id === loggedUser?._id ? users[1].name : users[0].name;
   };
   
   export const getSenderFull = (loggedUser, users) => {
+    //does the same as getSender but this one returns the whole userobject at index 1 or thesender
+    //rather than only name of the user
     return users[0]._id === loggedUser._id ? users[1] : users[0];
   };
