@@ -10,7 +10,8 @@ import UserListItem from "../user Avatar/UserListItem";
 
 
 
-//in short the MyChats component and the Header component are combined in this component
+//This SideDrawer Component acts like a Header and renders  the Search feature
+//along with the Bell icon and the Profile Icon
 //SHOULD SEPAREATE HEADER IN FUTURE AND MAKE IT A DIFFERENT COMPONENT
 const SideDrawer=()=>{
 
@@ -72,8 +73,10 @@ const SideDrawer=()=>{
 
     
 
-      //gets all one on one chats and group chats(if it is in any group) of the user
+      //accessChat will help initialize the First chat after finding the users
+      //from the search bar and clicking it for the first time
       const accessChat = async (userId) => {
+        //userid is the the id of the user you click on for first time
         console.log(userId);
     
         try {
@@ -90,7 +93,7 @@ const SideDrawer=()=>{
           if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
           console.log(chats)
           
-          setSelectedChat(data);
+          setSelectedChat(data);//this will rerendere if the data changes
           setLoadingChat(false);
           onClose();
         } catch (error) {

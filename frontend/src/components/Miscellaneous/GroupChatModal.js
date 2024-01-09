@@ -21,12 +21,13 @@ import {
   
 
 
-  //this component is only responsible for creating the group chat
+  //this component is only responsible for creating the group chat and is beside the My Chat Component
+  //
   //and not the ChatBox
   const GroupChatModal = ({ children }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [groupChatName, setGroupChatName] = useState();
-    const [selectedUsers, setSelectedUsers] = useState([]);//initially no musers in a group
+    const [selectedUsers, setSelectedUsers] = useState([]);//initially no sers in a group so []
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -166,6 +167,7 @@ import {
                   onChange={(e) => setGroupChatName(e.target.value)}
                 />
               </FormControl>
+              
               <FormControl>
                 <Input
                   placeholder="Add Users eg: John, Piyush, Jane"

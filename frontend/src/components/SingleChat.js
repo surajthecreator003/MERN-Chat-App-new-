@@ -4,16 +4,19 @@ import { Box, IconButton, Text } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { getSender, getSenderFull } from '../config/ChatLogics';
 import ProfileModal from './Miscellaneous/ProfileModel';
+import UpdateGroupChatModal from './Miscellaneous/UpdateGroupChatModal';
 
+
+//Single Chats is gonna show all kinds of chats both One on One andgroup Chats
 const SingleChat = ({fetchAgain,setFetchAgain}) => {
 
 
-    //whatever user we clicked on the My Chats becomes the selectedChat
+//whatever user we clicked on the My Chats becomes the selectedChat
 const {user,selectedChat,setSelectedChat}=ChatState();
 
   return (
     <>
-    {selectedChat ? 
+    {selectedChat ? <>
         <Text
             fontSize={{ base: "28px", md: "30px" }}
             pb={3}
@@ -39,22 +42,38 @@ const {user,selectedChat,setSelectedChat}=ChatState();
                     <>
                     {getSender(user,selectedChat.users)}
 
-                    {/*Profile Modal will display the profile of the user you are chatting with */}
+                    {/*Profile Modal(EYE Button inside Single Chats) will display the profile of the user you are chatting with */}
                     <ProfileModal user={getSenderFull(user,selectedChat.users)}/>
 
                     </> 
                     :
                     <>
                     {selectedChat.chatName.toUpperCase()}
+
+                    {/*UpdateGroupChatModal is the EYE button inside Group*/}
+                    <UpdateGroupChatModal
+                        fetchAgain={fetchAgain}
+                        setFetchAgain={setFetchAgain}
+                    />
                     </>
             }
-
-
-            {/*UpdatedGroupChatModel */}
-
         </Text> 
-        :
 
+        {/*this Box will display the messages of the selectedChat */}
+        <Box
+            display="flex"
+            flexDir="column"
+            justifyContent="flex-end"
+            p={3}
+            bg="#E8E8E8"
+            w="100%"
+            h="100%"
+            borderRadius="lg"
+            overflowY="hidden">
+            Messages Here
+        </Box>
+        </>
+        :
           <Box
             display="flex"
             flexDir="column"

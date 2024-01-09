@@ -5,7 +5,6 @@ import {ViewIcon}   from "@chakra-ui/icons";
 
 //LOCATED AT THE TOP RIGHT CORNER OF THE SCREEN BESIDE THE BELL ICON
 //SIMPLEY RENDERS PROFILE IMAGE WITH NAME AND EMAIL
-
 const ProfileModal = ({ user, children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 

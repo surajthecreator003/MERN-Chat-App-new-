@@ -7,6 +7,9 @@ import ChatLoading from './ChatLoading';
 import { getSender } from '../../config/ChatLogics';
 import GroupChatModal from './GroupChatModal';
 
+
+//My Chats will show all the Happend One and One and Group Chats
+//on the left side of the screen inside the SideDrawer Component
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
 
@@ -14,6 +17,9 @@ const MyChats = ({ fetchAgain }) => {
 
   const toast = useToast();
 
+
+  //fetchChats is gonna fetch all the one on one and group chats names 
+  //along with the latest messages
   const fetchChats = async () => {
     // console.log(user._id);
     try {
@@ -24,7 +30,7 @@ const MyChats = ({ fetchAgain }) => {
       };
 
       const { data } = await axios.get("/api/chat", config);
-      console.log("Fetched Chats=",data);//receive an array of chats 
+      console.log("Inside MyChats Component => Fetched Chats=",data);
 
       setChats(data);
 
@@ -42,19 +48,21 @@ const MyChats = ({ fetchAgain }) => {
 
   useEffect(() => {
 
+    console.log("useEffect Triggered inside MyChats Component")
+
     //stores the user (extracting from JWT token) in the localstorage of browser
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
 
-    fetchChats();//Fetches all the One on One and Group Chats that you have done with
-    //other users
-    // eslint-disable-next-line
-  }, [fetchAgain]);
+    fetchChats();
+    
+    //eslint-disable-next-line
+  }, [fetchAgain]);//fetchAgain is in ChatPage(The Mother Component)
 
   return (
     <Box
       display={{ base: selectedChat ? "none" : "flex", md: "flex" }}
       flexDir="column"
-      alignItems="center"
+      allignItems="center"
       p={3}
       bg="white"
       w={{ base: "100%", md: "31%" }}
@@ -120,7 +128,7 @@ const MyChats = ({ fetchAgain }) => {
                 {/* if there are no latest message and the chat is initial after you click then there would be no latest message shown*/}
                 {chat.latestMessage && (
                   <Text fontSize="xs">
-                  {/* if the latest message is less than 50 characters then display only 50 characters else display the whole message*/}
+                  {/* if the latest message is more than 50 characters then display only 50 characters else display the whole message*/}
                     <b>{chat.latestMessage.sender.name} : </b>
                     {chat.latestMessage.content.length > 50
                       ? chat.latestMessage.content.substring(0, 51) + "..."

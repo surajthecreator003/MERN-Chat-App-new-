@@ -6,6 +6,8 @@ import Signup from "../components/Authentication/Signup"
 import {useEffect} from "react";
 import {useHistory} from "react-router-dom";
 
+
+//Home page will contain Signup and Login page
 const Homepage = () => {
 
   const history=useHistory();
