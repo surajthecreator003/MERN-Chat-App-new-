@@ -5,21 +5,25 @@ const ChatContext=createContext();//creating the initial state of the App
 
 const ChatProvider =({children})=>{
     const[user,setUser]=useState();
+    const[selectedChat,setSelectedChat]=useState();
+    const[chats,setChats]=useState([]);
 
     const history=useHistory();
 
+
+    //need to fetch and add selectedChats inside useEffect
     useEffect(()=>{
         const userInfo=JSON.parse(localStorage.getItem("userInfo"));
         setUser(userInfo);
 
         if(!userInfo){
-            history.push("/")
+            history.push("/");
         }
     },[history])
 
     //the ChatContext we created is being used here like a component
     return(
-        <ChatContext.Provider value={{user,setUser}}>
+        <ChatContext.Provider value={{user,setUser,selectedChat,setSelectedChat,chats,setChats}}>
             {children}
         </ChatContext.Provider>
     )
