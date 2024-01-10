@@ -8,7 +8,9 @@ import { useState } from 'react';
 
 
 //Chatpage will render the whole Page after login and signup and
-//will render Chats and searchbar and the Header
+//will combine SideDrawer Component(ascts like the Header)
+// and the MyChats(which contains the one on one and group chats names only with latest messages)
+// and the chat Box Component(which has single chats and groupchats mesages when user or group is clicked)
 const Chatpage = () => {
 
 const {user}=ChatState();//will get the user that logged in from the context provider
@@ -18,6 +20,7 @@ const {user}=ChatState();//will get the user that logged in from the context pro
 const[fetchAgain,setFetchAgain]=useState(false);
 //fetchAgain and setFetchAgain are going through prop drilling 
 //should add these two to Chat Context Provider
+
 
   return (
     <div style={{width:"100%"}}>

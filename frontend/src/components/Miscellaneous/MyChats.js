@@ -8,8 +8,7 @@ import { getSender } from '../../config/ChatLogics';
 import GroupChatModal from './GroupChatModal';
 
 
-//My Chats will show all the Happend One and One and Group Chats
-//on the left side of the screen inside the SideDrawer Component
+//My Chats will show all the users of One and One and Group Chats with latest messages
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
 
@@ -139,6 +138,7 @@ const MyChats = ({ fetchAgain }) => {
             ))}
           </Stack>
         ) : (
+          //show Loaading if chats is not present take long to render
           <ChatLoading />
         )}
       </Box>

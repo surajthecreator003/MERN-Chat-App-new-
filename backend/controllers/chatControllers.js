@@ -9,15 +9,17 @@ const accessChat=asyncHandler(async(req,res)=>{
   
     const {userId}=req.body;// theoretically you will get this "userId" after clicking on 
      // the fetched Users from search user feature after that whatever user you click should
-     // get stored in the current User along with the clicked user 
-     // thats how you send the userId(manually)
+     // get sent as userId
 
     if(!userId){
            console.log("userId param not sent with request")
            return res.sendStatus(400);
     }
 
+    //isChat will store one on one chat 
     //this isChat should only happen when the user has some previous chats with that receiver
+    //req.user._id is the id of the user you are loggd with and is sent by decoding the jwt token
+    //userId is the id of the user you wnat to chat with
     var isChat=await Chat.find({
         isGroupChat:false,
         $and:[
@@ -36,7 +38,7 @@ const accessChat=asyncHandler(async(req,res)=>{
       if(isChat.length > 0){
         res.send(isChat[0]);
       } else {
-            //chatdata should be 
+            //chatdata would be function scoped to accessedChat
             var chatData={
                 chatName:"sender",
                 isGroupChat:false,
@@ -45,7 +47,7 @@ const accessChat=asyncHandler(async(req,res)=>{
 
       };
 
-      //if tehre were no previous conversations then it will move to the try Block for initial "CLICK ON USER FOR CHAT"
+      //if there were no previous conversations then it will move to the try Block for initial "CLICK ON USER FOR CHAT"
       //remember var is function scoped so dont get confused with chatData insideChat.create(chatData)
       try{
 

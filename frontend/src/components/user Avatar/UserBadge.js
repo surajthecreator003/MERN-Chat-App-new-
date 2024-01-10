@@ -4,7 +4,7 @@ import { Badge } from "@chakra-ui/layout";
 
 
 //this component would be used to show the added users in the CREATE GrOUP CHAT BAR under  the searched name Input Box
-//while adding users to the group during creating the grouip chat
+//while adding users to the group during creating the group chat
 const UserBadgeItem = ({ user, handleFunction, admin }) => {
   return (
     <Badge

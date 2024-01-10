@@ -15,6 +15,7 @@ import UserListItem from "../user Avatar/UserListItem";
 //SHOULD SEPAREATE HEADER IN FUTURE AND MAKE IT A DIFFERENT COMPONENT
 const SideDrawer=()=>{
 
+
     const [search,setSearch]=useState("");
     const [searchResult,setSearchResult]=useState([]);
     const [loading,setLoading]=useState(false);
@@ -22,6 +23,7 @@ const SideDrawer=()=>{
 
    
 
+    //this setSelectedChat will upodate the MyChats Component when chats is selected
     const {user,setSelectedChat,chats,setChats}=ChatState();
     const history=useHistory();
     const {isOpen,onClose,onOpen}=useDisclosure();

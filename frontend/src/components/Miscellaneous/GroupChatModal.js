@@ -22,8 +22,8 @@ import {
 
 
   //this component is only responsible for creating the group chat and is beside the My Chat Component
-  //
   //and not the ChatBox
+  // appears as  New Group Chat ➕ Button
   const GroupChatModal = ({ children }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [groupChatName, setGroupChatName] = useState();
