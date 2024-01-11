@@ -25,6 +25,7 @@ import UserListItem from "../user Avatar/UserListItem";
 
 //appears as the EYE Icon in the group Chat
 // this component will help in UPDATE,DELETE,ADD users to the group
+//and this component will appear isnide SingleChat Component
 const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [groupChatName, setGroupChatName] = useState();
@@ -213,7 +214,7 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
       //call setSelectedChat()  so that the user cant see the group
       user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
-      fetchMessages();
+      fetchMessages();// will update the users appearing in group after deleteing users
       setLoading(false);
     } catch (error) {
       toast({
