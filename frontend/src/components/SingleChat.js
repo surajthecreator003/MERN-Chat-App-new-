@@ -7,22 +7,54 @@ import ProfileModal from './Miscellaneous/ProfileModel';
 import UpdateGroupChatModal from './Miscellaneous/UpdateGroupChatModal';
 import ScrollableChat from './ScrollableChat';
 import axios from 'axios';
+import  io from "socket.io-client";
+import Lottie from "react-lottie";//Lottie package to show typing animation
+import animationData from "../animation/typing.json";
+//import { set } from 'mongoose';
 
+const ENDPOINT="http://localhost:4000";// the server port where the socket is listening
+
+var socket;
+var selectedChatCompare;
 
 //Single Chats is gonna show all kinds of chats both One on One andgroup Chats
 //and is gonna provide Input Box to ensend Messages
 const SingleChat = ({fetchAgain,setFetchAgain}) => {
 
 
-//whatever user we clicked on the My Chats becomes the selectedChat
-const {user,selectedChat,setSelectedChat}=ChatState();
 
 
-const [messages, setMessages] = useState([]);//messages is the entire messages or chat 
-//to be rendered inside Scrollable Component
 
-const [loading, setLoading] = useState(false);
-const [newMessage, setNewMessage] = useState("");//new message will store the message we typed in the input box
+  //whatever user we clicked on the My Chats becomes the selectedChat that vcontains the selected chat id
+  const {user,selectedChat,setSelectedChat}=ChatState();
+  console.log("chatid =",user);
+  console.log("selectedChat =",selectedChat);
+  //remember selectedChat provide the whole chat objectof that suer 
+
+
+  const [messages, setMessages] = useState([]);//messages is the entire messages or chat 
+  //to be rendered inside Scrollable Component
+
+  const [loading, setLoading] = useState(false);
+  const [newMessage, setNewMessage] = useState("");//new message will store the message we typed in the input box
+  const [socketConnected, setSocketConnected] = useState(false);//socketConnected will be sued in typing indicator
+
+
+  const [typing, setTyping] = useState(false);//will help in indnicating typing
+  const [istyping, setIsTyping] = useState(false);
+  
+
+//Lottie Typing indicator props
+  const defaultOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
+
 
 const toast = useToast();
 
@@ -30,6 +62,9 @@ const toast = useToast();
 const sendMessage=async(event)=>{//sends the message and refetches the chats
   //
   if(event.key === "Enter"  && newMessage){
+
+
+    socket.emit("stop typing", selectedChat._id);//s top the typing indicator after sending the message
 
     try{
         const config={
@@ -43,11 +78,18 @@ const sendMessage=async(event)=>{//sends the message and refetches the chats
         //after sending the message
 
         const {data}=await axios.post("/api/message",{content:newMessage,chatId:selectedChat._id},config)
-        console.log("Messages sent=",data);
+        //console.log("Messages sent=",data);
 
         setNewMessage("");//empties the input box after sending the message
 
-        setMessages([...messages,data])//a way to destructure and show data from oldest to newest on the bottom
+
+        console.log("new message to be emiteed=",data );
+
+
+        //Most Important 
+        socket.emit("new message",data);//this will update the state of the Connected sender
+
+        setMessages([...messages,data])//destructure the previous data and add the old one
 
         console.log("messages after updating=",messages)//this will not show the updated messages after rendnering
         //as expected as it would show after the next render
@@ -70,7 +112,8 @@ const sendMessage=async(event)=>{//sends the message and refetches the chats
 };
 
 
-//will fetch the seelced chats messages whether one on one or group chat
+//will fetch the selected chats messages whether one on one or group chat
+// and will also create a room 
 const fetchMessages = async () => {
   if (!selectedChat) return;
 
@@ -88,12 +131,14 @@ const fetchMessages = async () => {
       config
     );
 
-  console.log("Messages fetched to be shown inside ScrollableChat=",data)
+    console.log("Messages fetched to be shown inside ScrollableChat=",data)
   
     setMessages(data);
     setLoading(false);
 
-    //socket.emit("join chat", selectedChat._id);
+    socket.emit("join chat", selectedChat._id);
+    //basically will take the selected userid and join the room
+
   } catch (error) {
     toast({
       title: "Error Occured!",
@@ -108,20 +153,85 @@ const fetchMessages = async () => {
 
 
 
-useEffect(() => {//just loadthe chat of the selected user 
-  fetchMessages();
+//this will hanbdle the typing indicator
+const typingHandler = (e) => {
+  setNewMessage(e.target.value);
+
+  if (!socketConnected) return;//checks if socket connection is connected or not
+
+  if (!typing) {
+    setTyping(true);
+    socket.emit("typing", selectedChat._id);
+  }
+
+  //is more like a thgrottoling function than a debouncing function
+  let lastTypingTime = new Date().getTime();//stores the imidiate time when the typing indicator started
+  var timerLength = 3000;//3 secs
+
+  setTimeout(() => {
+
+    var timeNow = new Date().getTime();
+    var timeDiff = timeNow - lastTypingTime;//finds the typing seconds
+
+    if (timeDiff >= timerLength && typing) {//if still typing after 3 sconds then dont show the typing indicator 
+      socket.emit("stop typing", selectedChat._id);
+      setTyping(false);
+    }
+  }, timerLength);
+};//remove this timer and it will show typing... continously
+
+
+useEffect(()=>{// Creates the initial socket connection to the server
+  socket=io(ENDPOINT);//is same as we do io(httpServer) on server side which provides a socket object with which we can do socket.join or anything
+
+
+  //remember user is the user you are logged in with
+  socket.emit("setup",user);//emitting custom event named "setup" for initial room creation that will trigger socket.join(user._id) on the server side
+
+  socket.on("connected",()=>setSocketConnected(true))
+
+ socket.on("typing",()=>{
+   setIsTyping(true)
+ })
+
+ socket.on("stop typing",()=>{
+   setIsTyping(false)
+ })
+
+},[])//this useEffect will run on the very first render of SingleChat even if no user is selected to chat and then wil attach the socket event handler to it
+
+
+
+
+
+
+useEffect(() => {// just load the chat of the selected user 
+  
+  fetchMessages();// this has =>socket.emit("join chat", selectedChat._id); inside of it
+
+
+
+  selectedChatCompare=selectedChat
 }, [selectedChat]);
 //selectedChat is present in Chat provider(the global context)
-//and conncts Mychats to SingleChat
+//and connects Mychats to SingleChat
 
 
 
 
+//this is the most important useEffect as this will update the sender connected to it
+useEffect(()=>{
+  socket.on("message received",(newMessageReceived)=>{
+        if(!selectedChatCompare  || selectedChatCompare._id !== newMessageReceived.chat._id){
+            
+        }
+        else{
+          setMessages([...messages,newMessageReceived])
+        }
+  })
+})
 
-const typingHandler=(e)=>{
-  setNewMessage(e.target.value)
-  //typing indicator logic
-};
+
 
   return (
     <>
@@ -207,6 +317,19 @@ const typingHandler=(e)=>{
               isRequired
               mt={3}
             >
+
+              {istyping ? (
+                
+                <Lottie
+                    options={defaultOptions}
+                    // height={50}
+                    width={70}
+                    style={{ marginBottom: 15, marginLeft: 0 }}
+                  />
+                
+              ) : (
+                <></>
+              )}
               
               <Input
                 variant="filled"

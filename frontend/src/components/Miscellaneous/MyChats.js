@@ -148,4 +148,7 @@ const MyChats = ({ fetchAgain }) => {
 
 export default MyChats
 
+
+//the fetch returns the data in latest order depending upon the time so
+//in the MyChat Component we see the chats from latest to oldest in order
 //Code revirew Completed

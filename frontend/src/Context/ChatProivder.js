@@ -14,7 +14,11 @@ const ChatProvider =({children})=>{
     //need to fetch and add selectedChats inside useEffect
     useEffect(()=>{
         const userInfo=JSON.parse(localStorage.getItem("userInfo"));
+
+        //console.log("userInfo=",userInfo);
         setUser(userInfo);
+
+        //console.log("user=",user);
 
         if(!userInfo){
             history.push("/");

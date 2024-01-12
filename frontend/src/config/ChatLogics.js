@@ -7,7 +7,7 @@
 //m   will have the single object in map
 
 
-//will adda  little space after the Avatar icon  
+//will add a  little space after the Avatar icon  
 export const isSameSenderMargin = (messages, m, i, userId) => {
     
 
@@ -66,10 +66,8 @@ export const isSameSenderMargin = (messages, m, i, userId) => {
   };
   
   export const getSender = (loggedUser, users) => {
-    //checks the logged user is same or different and returns the sender name at index 1
-    // and remember the logged user is always at 0 index in the schema
-    //thats whybnreturn 1 index or if not then return 0 index rather than returning nothing
-    return users[0]?._id === loggedUser?._id ? users[1].name : users[0].name;
+    //checks the logged user is same or different and returns the sender name 
+    return users[0]?._id === loggedUser?._id ? users[1].name : users[0].name;//checks whether the sender is a t index o or 1 of chat document 
   };
   
   export const getSenderFull = (loggedUser, users) => {

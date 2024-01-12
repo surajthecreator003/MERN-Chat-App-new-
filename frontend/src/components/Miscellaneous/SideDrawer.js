@@ -78,7 +78,7 @@ const SideDrawer=()=>{
       //accessChat will help initialize the First chat after finding the users
       //from the search bar and clicking it for the first time
       const accessChat = async (userId) => {
-        //userid is the the id of the user you click on for first time
+        //userid is the user ID we are logged in  with
         console.log(userId);
     
         try {
