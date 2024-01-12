@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "../user Avatar/UserListItem";
+import { getSender } from "../../config/ChatLogics";
 
 
 
@@ -24,7 +25,7 @@ const SideDrawer=()=>{
    
 
     //this setSelectedChat will upodate the MyChats Component when chats is selected
-    const {user,setSelectedChat,chats,setChats}=ChatState();
+    const {user,setSelectedChat,chats,setChats,notifications,setNotifications}=ChatState();
     const history=useHistory();
     const {isOpen,onClose,onOpen}=useDisclosure();
 
@@ -95,7 +96,7 @@ const SideDrawer=()=>{
           if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
           console.log(chats)
           
-          setSelectedChat(data);//this will rerendere if the data changes
+          setSelectedChat(data);//this will rerender if the data changes
           setLoadingChat(false);
           onClose();
         } catch (error) {
@@ -111,6 +112,8 @@ const SideDrawer=()=>{
       };
     
 
+
+      //const eventhandler=()=>{console.log("got clicked")}
 
     return <div>
         {/*The Box is the MAIN Component that encompasses everything from Header to CHat Box and Users Search */}
@@ -147,8 +150,35 @@ const SideDrawer=()=>{
                   <BellIcon fontSize="2xl" m={1} />
    
                   </MenuButton>
+
+                  <MenuList pl={2}>
+                    {!notifications.length && "No New Messages"}
+
+                    {notifications.map((notif) => {
+                      console.log("notif=",notif);
+                      return (
+                      
+                    <MenuItem
+                      key={notif._id}
+                      onClick={() => {
+                        setSelectedChat(notif.chat);//this is not triggering to change the SingleChats
+                        setNotifications(notifications.filter((n) => n !== notif));
+                    }}
+
+                  >
+                  {notif.chat.isGroupChat
+                    ? `New Message in ${notif.chat.chatName}`
+                    : `New Message from ${getSender(user, notif.chat.users)}`}
+                  </MenuItem>
+
+                  )})}
+
+                  
+                  </MenuList>
                 </Menu>
 
+
+                
                 <Menu>
                   <MenuButton as={Button} rightIcon ={<ChevronDownIcon />}>
                       <Avatar size="sm" cursor="pointer" name={user.name} src={user.pic} />

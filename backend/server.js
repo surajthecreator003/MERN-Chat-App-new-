@@ -56,7 +56,7 @@ const io=require("socket.io")(
         cors:{
         origin:"http://localhost:3000"
          },
-         pingTimeout:60000,// is in milliseconds and tells that to wait for 60 seconds for the user to send something or else close the bandwidth
+         pingTimeout:6000000,// is in milliseconds and tells that to wait for 60 seconds for the user to send something or else close the bandwidth
     }
 )
 //we didnt used any express middleware for socket.io like we used to do while 
@@ -84,6 +84,8 @@ io.on("connection",
             })
 
 
+            //THIS IS MOST IMPORTANT AS THIS ROOM CONNECTS ALL OTHER INDIVIDUAL ROOMS AND ALSO
+            //HELPS IN UPDATING THE SSENDERS OR RECEIERS CHAT LIST
             //creates room with the selected chatId whether it be One on One or GroupChat
             socket.on("join chat",(room) =>{
                 socket.join(room);
@@ -128,7 +130,8 @@ io.on("connection",
 
 
 
-            //clsoe the socket server
+            //clsoe the socket server after whatever pingTimeout is given 
+            //after inactivity
             socket.off("setup", () => {
                 console.log("USER DISCONNECTED");
                 socket.leave(userData._id);

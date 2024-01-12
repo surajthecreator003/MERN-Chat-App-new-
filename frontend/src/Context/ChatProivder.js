@@ -8,6 +8,8 @@ const ChatProvider =({children})=>{
     const[selectedChat,setSelectedChat]=useState();
     const[chats,setChats]=useState([]);
 
+    const[notifications,setNotifications]=useState([]);//this is for the notification 
+
     const history=useHistory();
 
 
@@ -27,7 +29,7 @@ const ChatProvider =({children})=>{
 
     //the ChatContext we created is being used here like a component
     return(
-        <ChatContext.Provider value={{user,setUser,selectedChat,setSelectedChat,chats,setChats}}>
+        <ChatContext.Provider value={{user,setUser,selectedChat,setSelectedChat,chats,setChats,notifications,setNotifications}}>
             {children}
         </ChatContext.Provider>
     )

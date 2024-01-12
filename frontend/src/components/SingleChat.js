@@ -21,12 +21,8 @@ var selectedChatCompare;
 //and is gonna provide Input Box to ensend Messages
 const SingleChat = ({fetchAgain,setFetchAgain}) => {
 
-
-
-
-
   //whatever user we clicked on the My Chats becomes the selectedChat that vcontains the selected chat id
-  const {user,selectedChat,setSelectedChat}=ChatState();
+  const {user,selectedChat,setSelectedChat,notifications,setNotifications}=ChatState();
   console.log("chatid =",user);
   console.log("selectedChat =",selectedChat);
   //remember selectedChat provide the whole chat objectof that suer 
@@ -205,11 +201,9 @@ useEffect(()=>{// Creates the initial socket connection to the server
 
 
 
-useEffect(() => {// just load the chat of the selected user 
+useEffect(() => {// just load the chat of the selected user each time you click it
   
   fetchMessages();// this has =>socket.emit("join chat", selectedChat._id); inside of it
-
-
 
   selectedChatCompare=selectedChat
 }, [selectedChat]);
@@ -222,15 +216,24 @@ useEffect(() => {// just load the chat of the selected user
 //this is the most important useEffect as this will update the sender connected to it
 useEffect(()=>{
   socket.on("message received",(newMessageReceived)=>{
+    
+
+        //if in different chat then show the notification
         if(!selectedChatCompare  || selectedChatCompare._id !== newMessageReceived.chat._id){
-            
+           
+          
+          if (!notifications.includes(newMessageReceived)) {//if notification dosent have anything then add the newMessageReceived Object
+            setNotifications([newMessageReceived, ...notifications]);
+            setFetchAgain(!fetchAgain);
+          }
+
         }
-        else{
+        else{//iof not in the same Chat then just update the messages
           setMessages([...messages,newMessageReceived])
         }
   })
 })
-
+//and will also notify if the user isnot in the chat screen and is chatting with other
 
 
   return (
