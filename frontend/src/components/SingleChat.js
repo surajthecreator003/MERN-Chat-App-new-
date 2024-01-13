@@ -193,7 +193,7 @@ useEffect(()=>{// Creates the initial socket connection to the server
  socket.on("stop typing",()=>{
    setIsTyping(false)
  })
-
+// eslint-disable-next-line
 },[])//this useEffect will run on the very first render of SingleChat even if no user is selected to chat and then wil attach the socket event handler to it
 
 
@@ -206,6 +206,7 @@ useEffect(() => {// just load the chat of the selected user each time you click 
   fetchMessages();// this has =>socket.emit("join chat", selectedChat._id); inside of it
 
   selectedChatCompare=selectedChat
+  // eslint-disable-next-line
 }, [selectedChat]);
 //selectedChat is present in Chat provider(the global context)
 //and connects Mychats to SingleChat
@@ -231,6 +232,7 @@ useEffect(()=>{
         else{//iof not in the same Chat then just update the messages
           setMessages([...messages,newMessageReceived])
         }
+        // eslint-disable-next-line
   })
 })
 //and will also notify if the user isnot in the chat screen and is chatting with other
