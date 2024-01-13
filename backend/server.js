@@ -10,6 +10,9 @@ const messageRoutes=require("./routes/messageRoutes");
 
 const {notFound,errorHandler} =require("./middlewares/errorMiddleware")
 
+const path=require("path");
+
+
 const {chats} = require("./data/data")
 //console.log(chats);
 
@@ -23,9 +26,7 @@ app.use(express.json());//to accept json data and convert it to normal data
 
 
 
-app.get("/",(req,res)=>{
-    res.send("API is Running")
-})
+
 
 //for signup and login and also to get all users lists wihout the one that is sending the request
 app.use("/api/user",userRoutes);
@@ -37,6 +38,36 @@ app.use("/api/chat",chatRoutes);
 
 
 app.use("/api/message",messageRoutes);
+
+
+ 
+//------------------------------------Deployment
+
+const __dirname1=path.resolve()//to fetch the local path in which the deployment is done
+//on the 
+
+if(process.env.NODE_ENV==="production"){ //if the MPDE_ENV set to production by env.config() then
+    //do these steps
+
+
+    //it is gonna join the path to the frotend/build folder for production grade website for our project
+    //we did npm build in frontend build   
+    app.use(express.static(path.join(__dirname1,"/frontend/build")))
+
+
+    //this will catch all the routes or requests to our backend route
+    //as we did in devlopment for the home directory "/""  path ,now it will server the frontend files
+    app.get("*",(req,res)=>
+    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html")))
+
+}else{//if notin prodution then keep on using whatever PORT you have given in default
+    app.get("/",(req,res)=>{//this will give message "API is Running"
+        res.send("API is Running")
+    })
+}
+
+//------------------------------------Deployment
+
 
 
 app.use(notFound);

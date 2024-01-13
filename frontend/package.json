@@ -21,11 +21,12 @@
     "react-scripts": "5.0.1",
     "react-scrollable-feed": "^2.0.1",
     "socket.io-client": "^4.7.3",
+    "talk-a-tive": "file:..",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
