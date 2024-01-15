@@ -12,7 +12,9 @@ import Lottie from "react-lottie";//Lottie package to show typing animation
 import animationData from "../animation/typing.json";
 //import { set } from 'mongoose';
 
-const ENDPOINT="http://localhost:4000";// the server port where the socket is listening
+
+//THIS WAS CREATING THE WHOLE ISSUE WHERE FRONTEND WAS NOT GETTING CONNECTED TO THE SOCKET.IO SERVER ON RENDER
+const ENDPOINT=window.location.origin;// the server port where the socket is listening
 
 var socket;
 var selectedChatCompare;
